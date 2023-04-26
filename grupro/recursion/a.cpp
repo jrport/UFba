@@ -1,8 +1,12 @@
-#include <iostream>
+	#include <iostream>
 #include <vector>
 
-int series(int i){
-	std::vector<int> parte;
+std::vector<int> parte;
+
+std::vector<int> series(int i){
+	if(i==1){
+		parte.push_back(1);
+	}
 	if (i==2){
 		//std::vector<int> parte;
 		parte.push_back(1);
@@ -15,16 +19,18 @@ int series(int i){
  		parte.push_back(i);
  		series(i-1);
 	}	
-	for(int a:parte){
-		std::cout<<a;
-	} 
-	return 0;
+	return parte;
 }
 
 int main(){
 	int n;
+	std::vector<int> sequence;
 	std::cin>>n;
-	series(n);
+	// std::vector<int> parter;
+	sequence = series(n);
+	for (int i:sequence){
+		printf("%d ",i);
+	}
 	std::cout<<"\n";
 	return 0;
 }
