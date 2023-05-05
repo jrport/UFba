@@ -2,9 +2,9 @@ def fib(n):
     n = int(n)
     a = 0
     b = 1
-    for i in range(n-1):
-        if (n<=1): return n
-        else:
+    if (n<=1): c = n
+    else:
+        for i in range(n-1):
             c = a + b
             a = b
             b = c
