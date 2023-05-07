@@ -8,5 +8,6 @@ def fib(n):
             c = a + b
             a = b
             b = c
+            print(c)
     return c
 print(fib(input()))

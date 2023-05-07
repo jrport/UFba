@@ -13,6 +13,7 @@ soma=0
 for i in range(coluna):
     soma += int(matriz_transposta[i][0])
 print(soma)
+print(matriz)
 
 
 
