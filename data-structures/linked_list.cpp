@@ -151,17 +151,22 @@ class double_list {
         else{
             node* temp;
             temp = head;
-            node* temp2;
-            temp2 = head;
             while (temp->next!=nullptr){
-                    temp = temp->next;
+                temp = temp->next;
             }
-            while (temp->next!=temp2){
-                    temp = temp2->next;
-            }
-            temp2->next = temp;
-            temp->prev = temp2;
+            temp -> next = new_elem;
+            new_elem -> prev = temp;
         }
+    }
+    void search_sub(node* sublist){ 
+        node* search_node;
+        node* main_node;
+        node* lista_fim = head;
+        linked_list* path;
+        main_node = head;
+        search_node = sublist;
+        path = new linked_list;
+        while (head ==)
     }
     void free_list (){
         head = nullptr;
