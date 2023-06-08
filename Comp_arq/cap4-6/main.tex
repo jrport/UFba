@@ -1,38 +1,39 @@
-\documentclass[12pt]{elsarticle}
-\usepackage{amssymb}
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}       
+\usepackage{amsmath}               
+\usepackage{fancyhdr}               
+\usepackage{graphicx}               
+\usepackage{cancel} 
 \usepackage[brazil]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{amsthm}
-\usepackage[left=2.5cm, right=2.5cm, top=4cm, bottom=3cm, footskip=0.5cm]{geometry}
 
-\journal{ }
+\pagestyle{fancy} 
+\fancyhead[LO,L]{João Roberto da S. P.}
+\fancyhead[CO,C]{MATA48 - Arquitetura de Computadores}
+\fancyhead[RO,R]{\today}
+\fancyfoot[LO,L]{}
+\fancyfoot[CO,C]{\thepage}
+\fancyfoot[RO,R]{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
 
-\begin{document}        
-
-\begin{frontmatter}
-
+\begin{document}       
 \title{Resumo 1}
-
 \date{2 de junho de 2023}
-
 \author{João Roberto da Silva Porto}
 
-\address{Ufba - Departamento da Computação - Profa. Mirlei Moura da Silva}
-%Resumo 
 \begin{abstract}
-Resumo dos capítulos 4, 5 e 6 do livro Arquitetura e Organização de Computadores pelo autor William Stallings.aa
+Resumo dos capítulos 4, 5 e 6 do livro Arquitetura e Organização de Computadores pelo autor William Stallings.
 \end{abstract}
 
-\end{frontmatter}
-
-%% testo princicpal
 \section{Capítulo 4}
 
 O capítulo 4 discute os mecanismos de implementação de memória em sistemas computadorizados. Elaborando acerca das funcionalidades desempenhadas por essas tecnologias e tanto suas respectivas capacidades quanto suas deficiências.
 
-A construção de modelos eficientes de memória perpassa diferentes crivos e metódos de análise, em razão da grande variedade quanto às formas nas quais esses são instalados em um computador.
+A construção de modelos eficientes de memória perpassa diferentes crivos e metodos de análise, em razão da grande variedade quanto às formas nas quais esses são instalados em um computador.
 
-\subsection{Aspectos Gerais e Aspectos comparativos}
+\subsection{Aspectos caracteristicos de diferentes memorias}
 A diferenciação entre os tipos de memória se faz mais prática e sólida quando observada segundo critério definidos e comparaveis, sempre levando em conta o contexto prático da aplicação daquela tecnologia que ela integra.
 
 Mais notavelmente são observados aspectos como localização relativa ao processador e placa mãe, capacidade bruta de armazenamento, a quantidade de informação acessável e inserível de uma única vez, a maneira como se acessa os dados armazenados.
@@ -72,7 +73,7 @@ A pirâmide de memória subdivide-se em 3 categorias principais, cada uma com su
     \item Memórias off-line
 \end{enumerate}
 
-\subsubsection{O princípio da Localidade de Referência}
+\subsubsection*{O princípio da Localidade de Referência}
 Esse modelo de segmentação tem como pilar central o princípio da localidade de referência, isto é a tendência a existência de subrotinas iterativas que implicam na repetição de referências já acessadas, desta forma durante a execução de um programa existe uma tendência natural ao "agrupamento" de operações que partem à execução de um software. Desta maneira, informações armazenadas em memória de hierarquia inferior são gradualmente aglutinadas conforme são acessadas e transferidas para as de maior posição hierarquica. Assim, reduzindo a necessidade de acessos aos segmentos inferiores com o passar do tempo executando um programa.
 
 \subsection{Memória cache: Princípios}
@@ -83,11 +84,171 @@ Esta integração ocorre por meio da subdivisão da cache em diferentes camadas,
 O acesso e transferência de dados entre a cache e a memória principal dá-se na forma de blocos, um conjunto de palavras, que são por sua vez agrupados nas chamadas linhas dentro da memória cache. Esse processo é dinamizado graças a Localidade de Referência, em razão da tendência de dados relativos uma mesma sub-rotina estarem agrupados em um mesmo bloco. Com base nisto, sempre que uma palavra é exigida pelo processador e não está presente na cache, todo o bloco a quem essa palavra pertence e transplantado pela cache. 
 
 Já a comunicação entre a cache e os registradores do processador é conduzida na forma de palavras em uma velocidade muito maior do que as trocas entre níveis da cache, e consideravelmente mais rápida que as transferências entre cache e o resto da memória principal.
-\subsection{}
+\subsection{Elementos do projeto da memria cache}
+\subsubsection*{Endereçamento}
+Uma pratica comum na implementaçao de quase todos os processadores sao tecnologias de endereçamento de memoria virtual. Esta trata-se da traducao de celulas da memoria principal em uma representaçao virtual que possibilite a facilidade aos programas em execuçao de considerar o armazenamento de um ponto de vista puramente logico sem lidar diretamente com as limitaçoes fisicas de capacaidade fisica da memoria. Essa traducao normalmente fica a cargo de uma unidade especializada, a MMU.
+
+Existem dois metodos de endereçamento virtual: o logico, tambem chamado de virtual, e o fisico. Estes diferem nas interaçoes entre cache, MMU, processador e memoria principal. Sendo a cache fisica estacionada entre a MMU e a memoria, a custo de velocidade de comunicaçao com o processador, enquanto a cache virtual, alocada entre a MMU e o processador tem de lidar com conflitos no endereçamento uma vez que os programas tem acesso indices de referencia semelhantes implicando em choques que tem de ser resolvidos pela MMU.
+\subsubsection*{Mapeamento}
+O processo de transferencia de dados nas memorias principais com a cache da-se por intermedio de uma funçao que mapea blocos de palavras na memoria principal a linhas na cache. Existem diversas funçoes com esta finalidade, sendo as principais:
+
+\begin{itemize}
+\item Mapeamento Direto
+
+Uma funçao matematica aloca fixamente todos os blocos da memoria principal a linhas unicas na cache. Esse processo, apesar de simples, implica em choques entre diferentes blocos de memoria alocados as mesmas linhas, o que pode ser especialmente desvantajoso, especialmente quando dois blocos alocados a um mesmo endereço na cache sao repetidamente utilizados, incorrendo em trocas desncessarias constantes entre ambos em razao da pouca dinamicidade desta funçao.
+
+\item Mapeamento Associativo
+
+Uma funçao matematica mapeia blocos da memoria principal a quaisquer linhas na cache, tomando em conta a disponibilidade utilizando um sistemas de tags para identificaçao das informaçoes transferidas, desta forma nao incorrendo nos mesmos choques. Essa inteligencia na alocaçao dos blocos ocorre ao custo de uma complexidade comparativamente muito alta no circuito que implementa essa tecninca.
+
+\item Mapeamento Associativo em Conjunto
+
+Uma funçao associativa mapeia multiplos blocos a uma mesma linha, e as organiza internamente segundo um mapeamento direto. Desta forma incorrendo, num custo relativamente intermediario comparado aos demais enquanto ainda evitando choques excessivos.
+\end{itemize}
+
+\subsubsection*{Algoritmo de Substituiçao}
+Na eventualidade da lotaçao da memoria cache, faz-se necessario desocupar espaco para um novo bloco de memoria. Evidente que para sistemas baseados em mapeamento direto, esse processo nao possui complexidade significativa uma vez que existe somente uma linha possivel na cache para cada bloco da memoria principal. Quando tratando-se de processadores e caches baseados em mapeamento associativo ou associativo por conjunto tem de se estabelecer criterio para exclusao de um conjunto de dados em favor da inserçao de um novo. esse criterio pode obedecer variados principio de analise, os quais sao implantados a nivel de hardware. 
+
+Alguns exemplos de crivos aplicados em sistemas associativos de conjuntos sao:
+\begin{itemize}
+\item LRU - Least Recently Used
+
+Utiliza-se de um bit adicional USE em cada linha da cache de um dado conjunto relativo a multiplos blocos de memoria, e este sofre alteraçoes de modo a demarcar o seu uso mais recente em comparaçao as demais linhas referentes ao mesmo bloco de memoria. Desta forma, quando necessario, exclui a substituiçao ocorre na linha menos recentemente utilizada, demarcada pelo USE 0.
+
+\item FIFO - First In First Out
+
+Simplesmente elege-se a linha relativa ao bloco da memoria que esta na cache ha mais tempo. Uma implementaçao comum dessa pratica baseia-se no algoritmo roud-robin.
+
+\item LFU - Least Frequently Used
+
+Associa-se um contador a cada linha da memoria cache, de forma quantizar os usos daquela dada linha, desta forma elege-se aquela menos frequentemente utilizada.  
+\end{itemize}
+
+\subsubsection*{Politica de Escrita}
+No momento da substituiçao de um bloco de memoria na cache, atenta-se a qualquer alteraçao que tenha sido imposta sobre a palavra na cache, essas discrepancias precisam entao serem transplantadas para memoria principal. Tambem pode-se incorrer em circunstancias semelhantes quando lidando com multiplas CPUs e/ou dispostivos de E/S que tenham capacidade de alterar a memoria principal, necessitando uma correçao de modo a lidar com as informaçoes dessincronizadas em relaçao as na memoria cache.
+
+Essas operaçoes de correçao ocorrem majoritariamente seguindo uma de duas praticas mais comuns:
+\begin{itemize}
+\item Write-Through
+Replica-se toda operaçao de escrita entre a memoria principal e a memoria cache, implicando num fluxo constante de informaçoes e eventuais gargalos, em razao da falta de verificaçao para casos redundantes, onde a correçao nao se faz necessaria.
+
+\item Write-Back
+Alteraçoes ocorrem somente na cache e, por meio de um sistema de tags usando bits especificos, verifica-se quais blocos sofreram alteraçoes e somente esses sao alterados na memoria principal. Esse modelo incorre na elaboraçao de circuitos progressivamente mais complexos especialmente em ambiente com multiplos dispositivos de E/S que tem acesso a memoria.
+\end{itemize}
+
 \section{Capítulo 5}
+As implementaçoes de memorias de acesso rapido evoluiram consideravelmente no decorrer da historia, desde implementaçoes primitivas usando loops magnetico ate o padrao atual baseado em tecnologias semicondutoras. 
+
+Tambem conhecidas como memorias Cores, nome herdade pela estrutura em nucleos das primeiras projeçoes das memoria RAM, apesar de a maioria ser baseada nas mesmas tecnologias semicondutoras, elas ainda variam significantemente em suas funcionalidades e qualidades, de acordo com a suas respectivas arquiteturas internas implementadas. Seno alguns tipos de memoria principal que iremos nos aprofundar as: ROM, DRAM e SRAM.
+
+\subsection{Memoria principal: Estrutura basica}
+A unidade mais basica de uma memoria Core 'e' a celula de memoria, entre todas suas implementaçoes, define-se pela capacidade de armazenar um estado binario e de ser lida e/ou escrita, uma ou mais vezes.
+
+Esses processos sao viabilizados por estruturas de comunicacao, escrita e controle da memoria principal. Normalmente possuindo ao menos 3 interfaces:
+
+\begin{itemize}
+ \item Transporte
+
+ Responsavel por de fato armazenar o valor binario
+\item Controle
+
+Delegado a verificaçao e seleçao da celula onde ocorrera alguma operaçao
+\item Escrita e Saida
+
+Incubido de transformar o valor binario no terminal de transporte e/ou externar o valor armazenado por ele.
+\end{itemize} 
+\subsubsection*{Tipos de Memoria Core}
+A memoria RAM (Random Access Memory), apesar de sua descriçao nao se trata da unica Core com acesso randomizado. Sendo, na verdade, sua caracteristica definidora suas altas velocidades de escrita e leitura e sua volatidade, isto 'e sua necessidade de alimentaçao energetica constante para armazenamento de dados.
+
+As duas principais implementaçoes da RAM sao:
+\begin{itemize}
+
+\item DRAM
+
+DRAM, ou Dynamic RAM, utiliza de um sistemas comparativamente simples de transistores cujo sinal por si so de um dekes define diretamente os valores armazenados numa celula da Core. Esse processo requer um \textit{Refresh}, uma restauraçao auxiliar dos sinais armazenados esporadicamente em razao da dissipaçao natural das cargas. 
+
+\item SRAM
+
+Alternadamente, existem as SRAM, ou Statuc RAM, cujo design utiliza de circuitos \textit{flip-flops} para conservar os sinais de um dado conjunto de celular, de forma a nao necessitar de um circuito dedicado para o \textit{Refresh} de cada uma delas. 
+
+\end{itemize}
+
+Desta maneira, as DRAM incorrem custos inicialmente mais baixos em razao da maior simplicidade de seu circuito em comparaçao 'a' uma SRAM pe que necessitam de estruturas mais complexas para conservaçao de dados. Entretanto, as circunstancias se invertem, a medida que o tamanho da Core aumenta, os transistores necessarios para os \textit{Refresh} excedem significantemente mais do que os \textit{flip-flops} necessarios.
+
+Em contraste a simetria percebida nas operaçoes nas RAM, as ROM (Read Only Memory) permitem uma velocidade maior ou comparavel as RAM e, tambem, nao sao volateis. Normalmente, a implementaçao das ROM da-se atraves da gravaçao fisica dos dados nos transistores. Essa falta de dinamicidade aparente, apesar de limitante sob certas opticas, faz-se irrelevante e ate util em muitas aplicaçoes, como sistemas embarcados, bibliotecas e funçoes constantes, entre outros processos da mesma natureza.
+
+As ROM tambem sao encontradas em diversas variaçoes, como:
+
+\begin{itemize}
+    \item ROM 
+
+    ROM. ou Read Only Memory, tem como principal caracteristica a escrita fisica dos dados armazenados ainda na fabricaçao da memoria, num processo custoso e, em termos gerais, irreversivel. Permitindo acesso rapido a dados sem a necessidade de consultar a memoria secundaria e sem necessidade de alimentaçao eletrica.
+
+    \item PROM
+
+    PROM, ou Programable ROM, uma variaçao mais "acessivel" da ROM, ela tem a escrita de dados efetuada por um processo eletrico por maquinario especializado ja nas maos do consumidor final. Apesar do custo aparentemente mais acessivel em conjunto com as vantagens das ROM comuns, os preços das PROM nao escalam bem em comparaçao com as ROM.
+
+    \item EPROM
+
+    Uma alternativa mais pratica da PROM, tem sua escrita realizada eletronica, e ainda permite sua reutilizaçao, por meio de um processo de apagamento utilizando raios ultravioleta. Desta forma, sendo possivelmente mais acessivel que as PROM, entretanto escalam ,em termos de produçao em massa, pior que as PROM.
+
+    \item EEPROM
+
+    Semelhante a EPROM, a escrita e o apagamento sao ambos feitos eletricamente, facilitando e bareteando essa etapa do processo, as custas de valores ainda maiores quando aplicadas a producaçao em larga escala.
+
+    \item Flash
+
+    Popularizada na forma de dispositivos de armazenamnto movel, contrasta-se das demais por servir como uma alternativa intermediaria de preço acessivel entre EPROM e EEPROM.
+
+\end{itemize}
+
+\subsubsection*{Detecçao de erros}
+Dispositivos de memoria Core sao sujeitos a erros, seja por razoes de erro na fabricaçao por exemplo, onde o reparo desse dano implicaria em um processo muito dispendioso e excessivamente caro, ou por motivos da eventualidade fisico-eletronica que podem vir ocorrer naturalmente, temporariamente forçando um dado transistor em um sinal ou variando entre eles. 
+
+Nestes casos, existe uma serie de praticas comum entre as memorias principais que visam verificar a existencia, diagnosticar a natureza e, caso possivel, reparar as discrepencias indevidas na memoria. 
 
 
+\subsubsection*{Soluçoes do tipo DRAM}
+A fim de solucionar os maiores tempos de espera das memorias do tipo DRAM, ainda tentando aproveitar seus valores de produçao mais acessiveis, novas implementaçoes desse tipo de memoria foram elaboras.
 
-\bibliographystyle{elsarticle-num-names} 
+\begin{itemize}
+\item DRAM Sincrona
 
+Por meoi de um sinal externo de clock, a DRAM sincrona comunica-se com o processador transmitindo informaçoes a cada clock, utilizando o intervalo dessas interaçoes para operaçoes de controle e organizaçao dos dados.
+
+\item DRAM RamBus
+
+Atraves de um barramento especial, memorias do tipo RDRAM, comunicam-se, ainda que de forma assincrona, em altas velocidades com o processador.
+
+\item DDR-SDRAM
+
+A mais utilizada entre computadores pessoais, trata-se de uma versao melhorada da SDRAM que efetuar operaçoes de escrita e leitura para o processador duas vezes por clock, tanto na alta, quanto na baixa do sinal. Efetuando a execuçao de processos de controle no intervalo entre essas variaçoes e utilizando de um buffer proprio para agiilizar o processo.
+\end{itemize}
+\section{Capitulo 6}
+Mecanismos de memoria externa existem em resposta ao problema ao problema da volatilidade das memorias principais e as limitaçoes de capacidade destas, tal qual ditado pela ordem da hierarquia de memoria, permitindo um armazenamento bruto mais significativo ainda sob um custo por bit acessivel.
+
+As implementaçoes das memorias secundarias variam significantemente quanto a natureza das tecnologias que as compoem, desde maquinas baseadas em processos magneticos, eletronicos e opticos, cada uma com suas respectivas utilidades, historias e limitaçoes.
+\subsection{Disco magnetico: Funcionamento}
+Uma estrutura analoga ao vinil, entretanto constituido de superficies, em sua maioria, magneticas, baseia no surgimento de campos eletromagneticos a partir da rotaçao de um disco magnetico que entra um contato com uma "cabeça" formada por ao menos uma bobina condutora. Desta forma o contato entre a bobina e o disco em meio ao campo magnetico produz pulsos eletricos caracterisiticos e identificaveis que serao interpretados pelo computador num processo de leitura de dados, e, num contexto de escrita, a bobina produz o pulso em questao que sobreescreve os padroes magneticos demarcando pulsos no disco.
+\subsubsection{Organizaçao e capacidade}
+O Disco magnetico subdivide-se em circunferencias concentricas conhecidas como trilhas, separadas entre si por lacunas progressivamente menores a medida que aproximam-se dos extremos do disco, e, por sua vez, essas trilhas sao separadas em setores. 
+
+Essas subdivisoes e espaços vazios tem como funçao prover uma velocidade de acesso uniforme a informaçoes em todo disco, independente da distancia dos bits em questao do centro. Ancorando-se em uma distribuiçao que vise separe um mesmo bloco de dado pela maxima extensao do raio e, simultaneamente, preservando igualdade entre a velocidade angular relativa a quaisquer trilhas no disco.
+
+
+A capacidade do disco 'e' entao determinada pela densidade de bits em relaçao ao raio do disco.  
+
+\subsubsection{Aspectos fisicos e parametros de desempenho}
+Os discos magneticos podem ainda diferir entre si, de acordo com uma serie de condiçoes. Dizendo respeito ao numero de cabeças, portabilidade e reutilizaçao.
+
+Os principiais crivos de analise entre discos magneticos comparaveis sao relativos as velocidades para busca de uma trilha, inversao do sentido da rotaçao e a extensao da transferencia de dados.
+
+\subsubsection*{RAID}
+RAID, ou \textit{Redundant array of independent disks} diz respeito ao processo de utilizaçao de multiplos discos magneticos como uma unica memoria secundaria, aproveitando os discos para fins de redundancia de dados, aumentando consideravelmente a segunrança da informaçao e a velocidade de acesso e escrita dessas informaçoes. Esse processo faz-se possivel por meio, nao de uma ordem hierarquia incorporada aos multiplos niveis de uma RAID, mas sim pela implementaçao de diversos modelos de redundancia baseada em diferentes principios arquitetonicos, de forma a trazer as qualidades respectivas de cada um dos modelos.
+\subsection{Dispositivos opticos}
+O CD alcançou proeminencia como central ao processo de massificaçao do consumo de musica em sua epoca, permitindo um compartilhamento e leitura baratos e de alta qualidade. Tal processo fez-se possivel graças a implementaçao de uma memoria baseada em tecnologia laser, a qual gerava sulcos no corpo do disco optico no processo de gravaçao, e utilizava informaçoes recebidas a partir da reflexao nos sulcos da memoria secundaria em questao.
+
+Vale relembrar tambem o advento do DVD, que implemnentou uam series de melhorias no metodo de organizaçao das subdivisoes de dados no corpo do disco, possibilitando o compartilhamente tambem de midias visuais em alta qualidade.
+\subsection{Fita magnetica}
+Baseada em uma organizaçao e principios de gravaçao semelhantes aos do disco magnetico, a fita foi um meio pioneiro de armazenamento secundario. Apesar de preços acessiveis para a epoca, era notavel as limitaçoes de capacidade, qualidade e os limites do modelo de acesso sequencial atrelado a midia.
 \end{document}

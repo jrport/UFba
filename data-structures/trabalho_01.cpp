@@ -64,4 +64,15 @@ class linked_list{
             }
         }
     }
+  void check(){
+    node* slow = head;
+    node* fast = head;
+    while (slow != fast) {
+      fast = fast -> next -> next;
+      slow = slow -> next;
+      if ( fast == nullptr ){
+        printf("V");
+      }
+    }
+  }
 };
