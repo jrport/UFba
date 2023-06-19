@@ -1,78 +1,136 @@
 #include <iostream>
+#include <sstream>
+#include <string>
+using namespace std;
 
-class node{
+class node {
     public:
+    int data;
     node* next;
-    int data,
-    node(int n){
-        data = n;
+    node* prev;
+    node(int val){
+        data = val;
         next = nullptr;
+        prev = nullptr;
     }
 };
 
-class linked_list{
+class linked_list {
     public:
-    node* head;
+    node* head;  
     linked_list(){
-        node* head = nullptr;
+        head = nullptr;
     }
-    void append(int n){
-        node* new_elem = new node(n);
+    void append(int new_num){
+        node* new_val;
+        new_val = new node(new_num);
         if (head == nullptr){
-            head = new_elem;
+            head = new_val;
         }
         else{
-            node* temp = head;
-            while (temp->next!=nullptr){
-                temp = temp->next;
+            node* cur = head;
+            while (cur->next!=nullptr){
+                cur = cur->next;
             }
-            temp->next = new_elem;
+            cur -> next = new_val;
         }
-    }
-    void remove(int index){
-        node* temp = head;
-        node* temp1 = nullptr;
-        node* prox = nullptr;
-        for (int i = 0; i < index; i++){
-            temp = temp->next;
-        }
-        temp1 = temp -> next;
-        prox = temp->next->next;
-        temp->next = nullptr;
-        temp->next = prox;
-        temp1->next = nullptr;
-    }
-    void insert(int nelem,int index){
-        node* new_elem = new node(nelem);
-        node* temp = head;
-        for (int i = 0; i < index; i++){
-            temp = temp->next;
-        }
-        new_elem->next = temp->next;
-        temp->next=new_elem;
     }
     void display(){
-        if (head == nullptr){
-            printf("LISTA VAZIA");
+        if (head != nullptr) {
+            node* cur = head;
+            printf("Lista Encadeada:\n%d ",cur->data);
+            while (cur->next!=nullptr){
+                cur = cur->next;
+                printf("%d ",cur->data);
+            };
+            std::cout<<"\n";
         }
-        else{
-            node* temp = head;
-            std::cout<<"Lista:";
-            while (temp->next!=nullptr){
-                printf("%d",temp->data);
-                temp = temp->next;
-            }
+        else {
+            printf("Lista Vazia! \n");
         }
     }
-  void check(){
+    void free(){
+        head = nullptr;
+    }
+    void insert_begin(int new_val){
+        node* new_elem = new node(new_val);
+        new_elem -> next = head;
+        head = new_elem;
+    }
+    void insert_lista(int indice, int new_val){
+        node* cur = head;
+        node* new_elem = new node(new_val);
+        if (indice>0){
+            for (int i = 0; i<indice-1;i++){
+                cur = cur->next;
+            }
+            new_elem->next = cur->next;
+            cur -> next = new_elem;
+        }
+        else{
+            insert_begin(new_elem->data);
+        }
+    }
+  bool check_cycle(){
+    std::cout<<"LOLO";
     node* slow = head;
     node* fast = head;
-    while (slow != fast) {
-      fast = fast -> next -> next;
-      slow = slow -> next;
-      if ( fast == nullptr ){
-        printf("V");
+    if (head == nullptr){
+      std::cout<<"Sem Ciclo";
+      return false;
+    }
+    else{
+      while (slow->next!=nullptr){
+        slow=slow->next;
+        fast=fast->next->next;
+        if (slow==fast){
+          std::cout<<"Ciclo";
+          return true;
+        }
       }
+      return false;
+    }
+  }
+  node* find(int el){
+    if (check_cycle()){
+      node* temp = head;
+      while (temp!=nullptr){
+        if (temp->data==el){
+          return temp;
+        }
+        temp = temp->next;
+      }
+    }
+    return nullptr;
+  }
+  void link(int a, int b){
+    node* primeiro;
+    node* segundo;
+    primeiro = find(a);
+    segundo = find(b);
+    if ((primeiro != nullptr)&&(segundo != nullptr)){
+      primeiro->next=segundo;
     }
   }
 };
+
+
+
+int main(){
+ linked_list list;
+  string c;
+  int a, b, num, size;
+  cin>>size;
+  cin.ignore();
+  getline(cin,c);
+  istringstream nomes(c);
+  while (nomes>>num){
+    list.append(num);
+  }
+  list.display();
+  for (int i=0;i<size;i++){
+    cin>>a>>b;
+    list.link(a,b);
+  }
+  list.check_cycle();
+}
