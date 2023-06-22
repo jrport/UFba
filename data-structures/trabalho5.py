@@ -1,94 +1,140 @@
 class tree_node():
-    def __init__(self,num):
-        self.value = num
-        self.right = None
-        self.left = None
+  def __init__(self,int):
+    self.value = int
+    self.right = None
+    self.left = None
 
-class btree():
-    def __init__(self):
-        self.root = None
-    def Add(self,root,num):
-        if self.root is None: self.root = tree_node(num)
-        elif num > root.value:
-            if root.right is None: root.right = tree_node(num)
-            else: root = self.Add(root.right,num)
+class btree():  
+  def __init__(self):
+    self.root = None
+    self.check = False
+  def add(self, num, base): 
+    if self.root is None: self.root = tree_node(num)
+    else:
+      if base.value > num:
+        if base.left is None: base.left = tree_node(num)
         else:
-            if root.left is None: root.left = tree_node(num)
-            else: root = self.Add(root.left,num)
-    def find_p_target(self,root,num):
-    #     if (num == root.right.value)or(num == root.left.value):
-    #         return root
-    #     if num > root.value: 
-    #         self.find(root.right,num)
-    #     elif num < root.value:
-    #         self.find(root.left, num)
-    #     return -1
-    # def find(self,root,num):
-    #     if num == root.value:  return root
-    #     if num > root.value: 
-    #         root = root.right
-    #         self.find(root.right,num)
-    #     elif num < root.value:
-    #         root = root.left
-    #         self.find(root.left, num)
-    #     return -1
-    # def remove(self, num):
-    #     target = self.find(self.root,num)
-    #     if target.value != self.root.value:
-    #         p_target = self.find_p_target(self.root,num)
-    #     target = self.find(self.root,num)
-    #     if (target.right is None)and(target.left is None):
-    #         if target.value == self.root.value:
-    #             self.root = None
-    #         elif p_target.value>target.value: p_target.left is None
-    #         else: p_target.right is None
-    #     elif (target.right is None)or(target.left is None):
-    #         if target.value == self.root.value:
-    #             if self.root.right is not None:
-    #                 temp = self.root
-    #                 self.root = self.root.right
-    #                 temp.right = None
-    #             else:
-    #                 temp = self.root
-    #                 self.root = self.root.left
-    #                 temp.left = None
-    #         else:
-    #             if target.value == p_target.right.value:
-    #                 if target.right is not None: p_target.right = target.right
-    #                 else: p_target.right = target.left
-    #             elif target.value == p_target.left.value:
-    #                 if target.right is not None: p_target.left = target.right
-    #                 else: p_target.left = target.left
-    #     else:
-    #         pred = target.left
-    #         while pred.right is not None:
-    #             pred = pred.right
-    #         pred.right = target.right
-    #         p_target = self.find_p_target(self.root,tager)
-    #         p_pred = self.find_p_target(self.root,pred)
-    #         if p_target.value == p_target.right.value:
-    #             p_target.right = pred
-    #         else: p_target.left = pred
-    #         p_pred.right = pred.left
-    #         pred.left = target.left
-    #         target.right = None
-    #         target.left = None
-    def InOrder(self,root):
-        if root is not None:
-            self.InOrder(root.left)
-            print(root.value)
-            self.InOrder(root.right)
+          self.add(num,base.left)
+      else:
+        if base.right is None: base.right = tree_node(num)
+        else:
+          self.add(num,base.right)
+  def InOrder(self,node):
+    if node is None: return
+    self.InOrder(node.left)
+    print(node.value)
+    self.InOrder(node.right)
+  def find(self,num,base):
+    if base.value == num:
+      return base
+    else:
+      if base.value>num: 
+        return self.find(num,base.left)
+      else:
+        return self.find(num,base.right)
+  def find_p(self,num,base):
+    if base.value>num:
+      if base.left.value == num: 
+        return base
+      else: return self.find_p(num,base.left)
+    else:
+      if base.right.value == num: return base
+      else: return self.find_p(num,base.right)
+  def find_pred(self,num,base):
+    start = self.find(num,self.root)
+    start = start.left
+    while start.right is not None:
+      start = start.right
+    return start
+  def remove_root(self):
+    pred = self.find_pred(self.root.value,self.root)
+    pred.right = self.root.right
+    pred_p = self.find_p(pred.value,self.root)
+    if pred != self.root.left:
+      if pred.left is not None:
+        pred_p.right = pred.left
+      else:
+        pred_p.right = None
+      pred.left = self.root.left
+    self.root.right = None
+    self.root.lef = None
+    self.root = pred
+  def remove(self,num):
+    adr = self.find(num,self.root)
+    if adr == self.root:
+      self.remove_root()
+    else:
+      p_num = self.find_p(num,self.root)
+      if (adr.right is  None)and(adr.left is  None):
+        if p_num.right == adr: p_num.right = None
+        else: p_num.left = None
+      elif (adr.right is  None)or(adr.left is  None):
+        if p_num.right == adr: 
+          if adr.right is not None: 
+            p_num.right = adr.right
+            adr.right = None
+          else:
+            p_num.right = adr.left
+            adr.left = None
+        else:
+          if adr.right is not None: 
+            p_num.left = adr.right
+            adr.right = None
+          else:
+            p_num.left = adr.left
+            adr.left = None 
+      else:
+        pred = self.find_pred(adr.value,self.root)
+        pred.right = adr.right
+        pred_p = self.find_p(pred.value,self.root)
+        if pred_p != adr:
+          if pred.left is None:
+            pred.left = adr.left
+          else:
+            pred_p.right = pred.left
+            pred.left = adr.left
+          adr.right = None
+          adr.left = None
+          if p_num.right == adr:
+            p_num.right = pred
+          else: 
+            p_num.left = pred
+        else:
+          pred.right = adr.right
+          if pred.left is None:
+            pred.left = adr.left
+          adr.left = None
+          adr.right = None
+          if p_num.right == adr:
+            p_num.right = pred
+          else: 
+            p_num.left = pred
+  def InOrderStop(self,target,node):
+    self.InOrderStopRecursive(target,node)
+  def InOrderStopRecursive(self,target,node):
+    if self.check == False:
+      if node is None: return
+      self.InOrderStop(target,node.left)
+      if self.check == False:
+        print(node.value, end=' ')
+      if node.value != target:
+        self.InOrderStop(target,node.right)
+      else: self.check = True
 
 def main():
-    size = int(input())
-    tree = btree()
-    vector = [50,10,60,5,30,55,70,20,35,33]
-    #vector = [int(i) for i in input().split()]
-    for i in vector:
-        tree.Add(tree.root,i)
-    tree.InOrder(tree.root)
-    tree.remove(50)
-    tree.InOrder(tree.root)
+  a = int(input())
+  tree = btree()
+  vector = [int(i) for i in input().split()]
+  for i in vector:
+    tree.add(i,tree.root)
+  rem = [int(i) for i in input().split()]
+  target = int(input())
+  tree.InOrderStop(target,tree.root)
+  tree.check = False
+  print("\n",end="")
+  for i in rem:
+    tree.remove(i)
+  tree.InOrderStop(target,tree.root)
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+  main()
