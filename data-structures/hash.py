@@ -73,7 +73,7 @@ def main():
     index = int(input())
     elements = linked_list()
     for i in range(elem_num):
-        elements.append(input())
+        elements.append(input().strip())
     elements.hashing(table_size)
     elements.display_table(index)
 
