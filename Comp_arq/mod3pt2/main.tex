@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage[portuges]{babel}
+\pagestyle{fancy}
+\fancyhead[LO,L]{João Roberto da S. P.}
+\fancyhead[CO,C]{MATA48 - Arquitetura de Computadores}
+\fancyhead[RO,R]{\today}
+\fancyfoot[LO,L]{}
+\fancyfoot[CO,C]{\thepage}
+\fancyfoot[RO,R]{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}      
+\title{Conceitos}
+\date{05 de junho de 2023}
+\author{João Roberto da Silva Porto}
+
+\section*{Secundário Ativo}
+Ou \emph{Active Standby}, é um estado de suspensão em que um dado componente ou parte de um dispositivo mantém-se ativo e desocupado, mas em sincronia com o mecanismo principal em execução. Neste estado de espera, ou no inglês \emph{Standby}, o Secundário ativo mantém-se pronto para tomar o lugar de seu dispositivo principal, comumente, como medida de redundância em caso de uma falha durante o processamento.
+
+\section*{Failover}
+Uma prática de redundância em sistemas computacionais, em que as funções das quais um dado componente são prontamente redistribuidas em caso de uma falha, de maneira a evitar interrupções.
+
+\section*{Protocolo de Monitoramento}
+Também chamado de \emph{Snoopy} é um método de monitoramento que permite telemetria e verificação de uma dada atividade executada pelo computador para checar acessos à memória e checa eventos de controle.
+
+\section*{Coerência de Cachê}
+É um conceito relativo a manutenção da consistência de dados em sistemas computacionais \emph{multi-core} com várias memórias cache. Onde podem haver múltiplas instâncias de uma mesma informação espelhado dentre as cache, desta maneira faz-se necessária correção em todas elas caso haja alguma escrita ou remoção em somente um dos núcleos, assim garantindo coerência entre todos eles.
+
+\section*{Protocolo MESI}
+É um protocolo de manutenção de Coerência de Cachê que garante a consistência de dados sistemas com múltiplos processadores. Basea-se na marcação, \emph{tagging}, das memórias caches em estados relativos aos dados localizados na cache e se sofreram alterações, além de protocolar o que fazer em instâncias de choque entre tags.
+
+\section*{Multiprocessador Simétrico}
+Em inglês Simetrical Multi-Processors ou \emph{SMP}, caracteriza sistemas computacionais onde múltiplos processadores são integrados à uma mesma memória principal, com permissões de acesso, escrita e leitura simétricos, e compartilham o mesmo barramento, periféricos no geral, e módulos de entrada e saída, permitindo execução simultânea de múltiplas tarefas.
+
+\section*{Cluster Multiprocessador}
+Um sistema baseada em múltiplos nós interconectados, em que cada nó é um multiprocessador por si só. Essas partes trabalham juntos favorecendo alto paralelismo em toda a carga de trabalho compartilhada entre eles.
+
+\section*{Acesso Uniforme à Memória}
+\emph{Uniform Memory Access}, ou UMA, é um tipo de arquitetura de memória baseada em latência uniforme dentre todos os processadores por meio de um único barramento de memória compartilhado entre todos as CPUs.
+
+\section*{Protocolo de Diretório}
+Um protocolo responsável pela manutenção de Coerência de Cache, lidando com as instâncias de colisões entre alterações conflitantes de unidades de dados que estão em diferentes caches. O Protocolo de Diretório será responsável por monitorar e listar as cópias de dados nas diferentes caches administrando as operações de leitura e escrita, garantindo a Coerência de Cache.
+
+\section*{Acesso Não Uniforme à Memória}
+\emph{Non-Uniform Memory Access}, ou NUMA, são modelos de arquiteturas que favorecem variação na latência de acesso à memória pelos processadores, dependendo da parte acessada na memória. Ou seja, diferentes processadores acessam áreas específicas da memória mais rápido que os outros. 
+ 
+O que pode ser especialmente útil e vantajoso em sistemas multiprocessadores onde nós tem funções especializadas.
+
+\section*{Uniprocessador}
+Um sistema Uniprocessador define uma maquina que contem somente um único processador e executa processos sequencialmente em um dado núcleo, ainda que haja espaço para implementações de paralelismo por outras vias, como pipelines e estruturas \emph{multicore}.
+
+\section*{Failback Secundário Passivo} 
+Conceito definido no contexto da resiliência de sistemas, descreve o processo de retorno de um Active Standby depois um Failover de forma que o dispositivo principal retorne a execução das instruções enquanto o Secundário retorna ao estado passivo.
+
+\section*{Multicore}
+Tipo de arquitetura baseada na integração de múltiplos núcleos de processamento em uma mesma CPU, onde cada núcleo é capaz de agir independentemente permitindo paralelismo.
+
+\section*{Superescalar}
+Tipo de arquitetura de processador que favorece paralelismo à nível de instrução executada por um processador, o qual decodifica e executa várias instruções em um mesmo ciclo de clock.
+
+\section*{Chip Multiprocessador}
+Um Chip Multiprocessador é definido por um circuito integrado onde múltiplos CPUs inteiros existem permitindo paralelismo a partir de uma escala maior, requerindo uma série de tecnologias para divisão de carga de processamento e cordenação das partes do chip.
+
+\section*{Multithreading Simultâneo} 
+Simultaneous Multithreading, ou SMT, é um tipo de Multithreading que se destaca por permitir paralelismo não só em cada thread, mas entre elas. Também conhecido como hyperthreading, esta tecnica eleva o paralelismo dos Multithreading além do simples nível de instrução.
+
+\section*{Recurso Vetorial}
+Também conhecido como Processador Vetorial, em inglês \emph{Vector Processing}, descreve um tipo de processador especializado em conjuntos de instruções em forma vetorial em contraste a tradicional abordagem escalar.  
+
+\end{document}
