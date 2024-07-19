@@ -40,12 +40,16 @@ _start:
 
 .end_loop:
     dec rcx
+
+    ; checa divisao por 1
+    cmp rcx, 0
+    je .impar_message
     
     xor ah, ah
     xor al, al
     xor bx, bx
 
-    mov ax, 10    
+    mov ax, cx
     mov bx, 2      
     xor dx, dx
     div bx          
@@ -62,7 +66,6 @@ _start:
 .impar_message:
     mov rsi, impar
     mov rdx, impar_len
-    syscall 
     jmp .print
 
 .print:
